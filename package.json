@@ -19,7 +19,9 @@
     "dependencies": {
         "lodash": "latest",
         "express": "4.15.*",
-        "body-parser": "1.17.*"
+        "body-parser": "1.17.*",
+        "request-promise": "4.1.*",
+        "request": "2.80.*"
     },
     "devDependencies": {
         "nodemon": "latest"
