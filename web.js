@@ -20,6 +20,7 @@
     });
 
     app.post('/', function (req, res) {
+        console.log(JSON.stringify(req.body));
         res.json(req.body);
     });
 })();
