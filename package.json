@@ -1,0 +1,27 @@
+{
+    "name": "eat-me",
+    "version": "0.0.1",
+    "description": "A quick server to collect places to visit",
+    "main": "web.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "node web.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/hanpeter/eat-me.git"
+    },
+    "author": "@hanpeter",
+    "license": "MIT",
+    "engines": {
+        "node": "6.10.*"
+    },
+    "dependencies": {
+        "lodash": "latest",
+        "express": "4.15.*",
+        "body-parser": "1.17.*"
+    },
+    "devDependencies": {
+        "nodemon": "latest"
+    }
+}
