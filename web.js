@@ -29,6 +29,7 @@
                 return;
             }
 
+            console.log(event, event.message);
             message = event.message;
 
             if (message.type !== 'text') {
