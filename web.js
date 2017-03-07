@@ -18,4 +18,10 @@
     app.get('/', function (req, res) {
         res.send('Hello World!');
     });
+
+    app.post('/', function (req, res) {
+        console.log(req.get('X-Line-Signature'));
+        console.log(JSON.stringify(req.body));
+        res.json(req.body);
+    });
 })();
