@@ -49,7 +49,7 @@
                     }]
                 },
                 json: true
-            })
+            });
         });
 
         res.json(req.body);
