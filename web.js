@@ -39,8 +39,10 @@
                 return;
             }
 
+            var businessId = message.text.split('yelp.com/biz/')[1];
+
             replies.push(
-                yelp.getBusiness('purple-kow-san-francisco-2')
+                yelp.getBusiness(businessId)
                     .then(function (business) {
                         var msgText = [
                             business.name,
