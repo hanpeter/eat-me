@@ -6,6 +6,7 @@
     var _ = require('lodash');
     var Promise = require('bluebird');
     var request = Promise.promisify(require('request'));
+    var yelp = require('./yelp.js');
 
     var app = express();
     var PORT = process.env.PORT || 9001;
@@ -38,21 +39,36 @@
                 return;
             }
 
-            replies.push(request({
-                method: 'POST',
-                uri: 'https://api.line.me/v2/bot/message/reply',
-                headers: {
-                    Authorization: 'Bearer ' + process.env.LINE_CHANNEL_ACCESS_TOKEN,
-                },
-                body: {
-                    replyToken: event.replyToken,
-                    messages: [{
-                        type: 'text',
-                        text: message.text
-                    }]
-                },
-                json: true
-            }));
+            var businessId = message.text.split('yelp.com/biz/')[1];
+
+            replies.push(
+                yelp.getBusiness(businessId)
+                    .then(function (business) {
+                        var msgText = [
+                            business.name,
+                            'has rating of',
+                            business.rating,
+                            'and is currently',
+                            (business.hours[0].is_open_now ? '' : 'not'),
+                            'open'
+                        ].join(' ');
+
+                        return request({
+                            method: 'POST',
+                            uri: 'https://api.line.me/v2/bot/message/reply',
+                            headers: {
+                                Authorization: 'Bearer ' + process.env.LINE_CHANNEL_ACCESS_TOKEN,
+                            },
+                            json: {
+                                replyToken: event.replyToken,
+                                messages: [{
+                                    type: 'text',
+                                    text: msgText
+                                }]
+                            }
+                        });
+                    })
+            );
         });
 
         Promise.all(replies).then(function () {
