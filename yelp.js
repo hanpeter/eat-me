@@ -2,16 +2,21 @@
     'use strict';
 
     var _ = require('lodash');
+    var moment = require('moment');
     var Promise = require('bluebird');
     var request = Promise.promisify(require('request'));
 
     function yelp() {
-        var access_token = undefined;
+        var access_token = {
+            token: null,
+            // Use the yesterday as a starting value.
+            expires: moment().subtract(1, 'days')
+        };
 
         function authenticate() {
-            if (access_token) {
+            if (moment().isBefore(access_token.expires)) {
                 return Promise.try(function () {
-                    return access_token;
+                    return access_token.token;
                 });
             }
 
@@ -22,9 +27,14 @@
                     grant_type: 'client_credentials',
                     client_id: process.env.YELP_APP_ID,
                     client_secret: process.env.YELP_APP_SECRET
-                }
+                },
+                json: true
             }).then(function (resp) {
-                return JSON.parse(resp.body).access_token;
+                access_token.token = resp.body.access_token;
+                access_token.expires = moment().add(resp.body.expires_in, 'seconds');
+                console.log('A new token has been received', access_token);
+
+                return access_token.token;
             });
         }
 
@@ -41,8 +51,9 @@
                             json: true
                         });
                     })
-                    .then(function (response) {
-                        return response.body;
+                    .then(function (resp) {
+                        console.log('Found business', resp.body)
+                        return resp.body;
                     })
             }
         };

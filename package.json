@@ -18,6 +18,7 @@
     },
     "dependencies": {
         "lodash": "latest",
+        "moment": "latest",
         "express": "4.15.*",
         "body-parser": "1.17.*",
         "request": "2.80.*",
