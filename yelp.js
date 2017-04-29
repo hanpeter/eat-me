@@ -52,7 +52,7 @@
                         });
                     })
                     .then(function (resp) {
-                        console.log('Found business', resp.body)
+                        console.log('Found business', resp.body);
                         return resp.body;
                     })
             }

@@ -7,6 +7,7 @@
     var Promise = require('bluebird');
     var request = Promise.promisify(require('request'));
     var yelp = require('./yelp.js');
+    var line = require('./line.js');
 
     var app = express();
     var PORT = process.env.PORT || 9001;
@@ -29,20 +30,16 @@
         var replies = [];
 
         _.forEach(req.body.events, function (event) {
-            if (event.type !== 'message') {
-                return;
-            }
-
-            var message = event.message;
-
-            if (message.type !== 'text') {
-                return;
-            }
-
-            var businessId = message.text.split('yelp.com/biz/')[1];
-
             replies.push(
-                yelp.getBusiness(businessId)
+                line.getMessage(event)
+                    .then(function (message) {
+                        return Promise.try(function () {
+                            return message.split('yelp.com/biz/')[1];
+                        });
+                    })
+                    .then(function (businessId) {
+                        return yelp.getBusiness(businessId);
+                    })
                     .then(function (business) {
                         var msgText = [
                             business.name,
@@ -53,20 +50,7 @@
                             'open'
                         ].join(' ');
 
-                        return request({
-                            method: 'POST',
-                            uri: 'https://api.line.me/v2/bot/message/reply',
-                            headers: {
-                                Authorization: 'Bearer ' + process.env.LINE_CHANNEL_ACCESS_TOKEN,
-                            },
-                            json: {
-                                replyToken: event.replyToken,
-                                messages: [{
-                                    type: 'text',
-                                    text: msgText
-                                }]
-                            }
-                        });
+                        return line.reply(event.replyToken, msgText);
                     })
             );
         });
