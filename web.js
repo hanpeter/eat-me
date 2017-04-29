@@ -9,8 +9,7 @@
     var yelp = require('./yelp.js');
     var line = require('./line.js');
     var errors = require('./errors.js');
-    var InvalidEventError = errors.InvalidEventError;
-    var InvalidMessageError = errors.InvalidMessageError;
+    var strings = require('./strings.js');
 
     var app = express();
     var PORT = process.env.PORT || 9001;
@@ -20,10 +19,6 @@
 
     app.listen(PORT, function () {
         console.log('Server started on port ' + PORT);
-    });
-
-    app.get('/', function (req, res) {
-        res.send('Hello World!');
     });
 
     app.post('/', function (req, res) {
@@ -55,11 +50,11 @@
 
                         return line.reply(event.replyToken, msgText);
                     })
-                    .catch(InvalidEventError, function (error) {
+                    .catch(errors.InvalidEventError, function (error) {
                         return;
                     })
-                    .catch(InvalidMessageError, function (error) {
-                        return line.reply(event.replyToken, 'Please only send text messages');
+                    .catch(errors.InvalidMessageError, function (error) {
+                        return line.reply(event.replyToken, strings.GenericUsageMessage);
                     })
             )
         });
