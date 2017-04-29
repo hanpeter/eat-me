@@ -8,6 +8,9 @@
     var request = Promise.promisify(require('request'));
     var yelp = require('./yelp.js');
     var line = require('./line.js');
+    var errors = require('./errors.js');
+    var InvalidEventError = errors.InvalidEventError;
+    var InvalidMessageError = errors.InvalidMessageError;
 
     var app = express();
     var PORT = process.env.PORT || 9001;
@@ -52,7 +55,13 @@
 
                         return line.reply(event.replyToken, msgText);
                     })
-            );
+                    .catch(InvalidEventError, function (error) {
+                        return;
+                    })
+                    .catch(InvalidMessageError, function (error) {
+                        return line.reply(event.replyToken, 'Please only send text messages');
+                    })
+            )
         });
 
         Promise.all(replies).then(function () {

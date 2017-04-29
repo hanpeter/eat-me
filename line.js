@@ -4,20 +4,22 @@
     var _ = require('lodash');
     var Promise = require('bluebird');
     var request = Promise.promisify(require('request'));
+    var errors = require('./errors.js');
+    var InvalidEventError = errors.InvalidEventError;
+    var InvalidMessageError = errors.InvalidMessageError;
 
     function line() {
         return {
-
             getMessage: function (event) {
                 return Promise.try(function () {
                     if (event.type !== 'message') {
-                        throw new Error('Invalid message');
+                        throw new InvalidEventError();
                     }
 
                     var message = event.message;
 
                     if (message.type !== 'text') {
-                        throw new Error('Invalid message');
+                        throw new InvalidMessageError();
                     }
 
                     return message.text;

@@ -22,7 +22,8 @@
         "express": "4.15.*",
         "body-parser": "1.17.*",
         "request": "2.80.*",
-        "bluebird": "3.5.*"
+        "bluebird": "3.5.*",
+        "make-error": "1.2.*"
     },
     "devDependencies": {
         "nodemon": "latest"
