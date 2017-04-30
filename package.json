@@ -1,30 +1,33 @@
 {
-    "name": "eat-me",
-    "version": "0.0.1",
-    "description": "A quick server to collect places to visit",
-    "main": "web.js",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "node web.js"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/hanpeter/eat-me.git"
-    },
-    "author": "@hanpeter",
-    "license": "MIT",
-    "engines": {
-        "node": "6.10.*"
-    },
-    "dependencies": {
-        "lodash": "latest",
-        "moment": "latest",
-        "express": "4.15.*",
-        "body-parser": "1.17.*",
-        "request": "2.80.*",
-        "bluebird": "3.5.*"
-    },
-    "devDependencies": {
-        "nodemon": "latest"
-    }
+  "name": "eat-me",
+  "version": "0.0.1",
+  "description": "A quick server to collect places to visit",
+  "main": "web.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node web.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hanpeter/eat-me.git"
+  },
+  "author": "@hanpeter",
+  "license": "MIT",
+  "engines": {
+    "node": "6.10.*"
+  },
+  "dependencies": {
+    "bluebird": "3.5.*",
+    "body-parser": "1.17.*",
+    "crypto-js": "3.1.*",
+    "express": "4.15.*",
+    "lodash": "latest",
+    "make-error": "1.2.*",
+    "moment": "latest",
+    "request": "2.80.*",
+    "js-base64": "2.1.*"
+  },
+  "devDependencies": {
+    "nodemon": "latest"
+  }
 }
