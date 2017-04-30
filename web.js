@@ -22,6 +22,7 @@
     });
 
     app.post('/', function (req, res) {
+        console.log(req.body);
         console.log(req.get('X-Line-Signature'));
         console.log(JSON.stringify(req.body));
 
