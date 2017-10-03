@@ -28,13 +28,21 @@
                     }
 
                     var message = event.message;
-
                     if (message.type !== 'text') {
                         console.log('Message type must be "text", not "' + message.type + '"');
                         throw new InvalidMessageError();
                     }
 
-                    return message.text;
+                    var source = event.source;
+                    if (source.type !== 'user') {
+                        console.log('Source type must be "user", not "' + source.type + '"');
+                        throw new InvalidMessageError();
+                    }
+
+                    return {
+                        text: message.text,
+                        user_id: source.userId,
+                    };
                 });
             },
             reply: function (replyToken, message) {

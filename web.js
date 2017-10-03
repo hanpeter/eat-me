@@ -8,6 +8,7 @@
     var request = Promise.promisify(require('request'));
     var yelp = require('./yelp.js');
     var line = require('./line.js');
+    var db = require('./db.js');
     var errors = require('./errors.js');
     var strings = require('./strings.js');
 
@@ -34,29 +35,46 @@
             replies.push(
                 line.getMessage(event)
                     .then(function (message) {
-                        return Promise.try(function () {
-                            if (message.indexOf('yelp.com/biz/') < 0) {
-                                console.log('Unable to find yelp link');
+                        var split_message = message.text.split(' ');
+                        var action_str = split_message[0];
+                        var link = split_message[1];
+                        var action = null;
+                        var biz_id = null;
+                        var user_id = message.user_id;
+
+                        switch (action_str.toLowerCase()) {
+                            case 'add':
+                                action = db.addShop;
+                                break;
+                            case 'delete':
+                                break;
+                            case 'list':
+                                break;
+                            default:
+                                console.log('Invalid action value: ' + action);
                                 throw new errors.InvalidMessageError();
-                            }
+                        }
 
-                            return message.split('yelp.com/biz/')[1];
-                        });
-                    })
-                    .then(function (businessId) {
-                        return yelp.getBusiness(businessId);
-                    })
-                    .then(function (business) {
-                        var msgText = [
-                            business.name,
-                            'has rating of',
-                            business.rating,
-                            'and is currently',
-                            (business.hours[0].is_open_now ? '' : 'not'),
-                            'open'
-                        ].join(' ');
+                        if (link.indexOf('yelp.com/biz/') < 0) {
+                            console.log('Unable to find yelp link');
+                            throw new errors.InvalidMessageError();
+                        }
+                        biz_id = link.split('yelp.com/biz/')[1];
 
-                        return line.reply(event.replyToken, msgText);
+                        return db.getUser(user_id)
+                            .then(function (rows) {
+                                if (rows.length) {
+                                    return Promise.try(function () {
+                                        return rows;
+                                    });
+                                }
+                                else {
+                                    return db.addUser(user_id, user_id);
+                                }
+                            })
+                            .then(function (rows) {
+                                return action(biz_id, user_id);
+                            });
                     })
                     .catch(errors.InvalidEventError, function (error) {
                         return;
