@@ -67,8 +67,11 @@
             )
         });
 
-        Promise.all(replies).then(function () {
-            res.sendStatus(200);
-        });
+        Promise.all(replies)
+            .then(function () {
+                res.sendStatus(200);
+            }).catch(function () {
+                res.sendStatus(500);
+            });
     });
 })();
