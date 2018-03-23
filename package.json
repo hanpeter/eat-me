@@ -1,6 +1,6 @@
 {
   "name": "eat-me",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A quick server to collect places to visit",
   "main": "web.js",
   "scripts": {
