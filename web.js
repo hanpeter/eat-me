@@ -5,7 +5,6 @@
     var bodyParser = require('body-parser');
     var _ = require('lodash');
     var Promise = require('bluebird');
-    var request = Promise.promisify(require('request'));
     var yelp = require('./yelp.js');
     var line = require('./line.js');
     var errors = require('./errors.js');
@@ -67,8 +66,11 @@
             )
         });
 
-        Promise.all(replies).then(function () {
-            res.sendStatus(200);
-        });
+        Promise.all(replies)
+            .then(function () {
+                res.sendStatus(200);
+            }).catch(function () {
+                res.sendStatus(500);
+            });
     });
 })();
